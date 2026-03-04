@@ -1,79 +1,36 @@
-# apps/web (Next.js)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Purpose
-- Public guidance pages (랜딩/정책/FAQ)
-- Workspace product pages (의뢰자/작업자/AI 연동)
+## Getting Started
 
-## Folder Structure
-```text
-apps/web/
-  app/
-    layout.tsx
-    globals.css
-    (public)/
-      layout.tsx
-      page.tsx
-      how-it-works/
-      pricing/
-      faq/
-      policy/
-      policies/*
-      login/
-      signup/
-      api-docs/
-      status/
-      trust/
-    (workspace)/
-      layout.tsx
-      workspace/
-      owner/*
-      worker/*
-      ai/*
-  src/
-    components/
-      layout/
-        site-header.tsx
-        workspace-shell.tsx
-        page-frame.tsx
-        role-nav.ts
-    lib/
-      seo.ts
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Routing Rules
-- URL은 route group 이름을 포함하지 않습니다.
-  - `app/(public)/pricing/page.tsx` -> `/pricing`
-  - `app/(workspace)/owner/dashboard/page.tsx` -> `/owner/dashboard`
-- 안내 페이지는 `(public)` 아래에만 둡니다.
-- 운영/대시보드 페이지는 `(workspace)` 아래에만 둡니다.
-- `(public)`은 상단 헤더, `(workspace)`는 사이드바 셸을 사용합니다.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Import Rules
-- 공통 UI import는 alias를 사용합니다.
-  - `@/components/layout/page-frame`
-  - `@/components/layout/role-nav`
-  - `@/components/layout/site-header`
-- 상대경로 기반 깊은 import(`../../../`)는 새 코드에서 금지합니다.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Testing stack
-- Vitest + RTL
-- Playwright (smoke + full E2E)
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Commands
-- `npm ci`
-- `npm run lint`
-- `npm run test -- --run`
-- `npm run build`
-- `npm run e2e -- -g "@smoke"`
+## Learn More
 
-## Local API Bridge (폼 연동)
-`/api/*` route handler가 백엔드(`apps/api`)로 요청을 프록시합니다.
-환경 변수 샘플은 `.env.example`을 참고하세요.
+To learn more about Next.js, take a look at the following resources:
 
-- `HUMAN_PROXY_API_BASE_URL` (default: `http://127.0.0.1:8080`)
-- `HUMAN_PROXY_AGENT_API_KEY` (default: `hp_test_key`)
-- `HUMAN_PROXY_AGENT_SIGNING_SECRET` (default: `hp-dev-signing-secret`)
-- `HUMAN_PROXY_WORKER_BEARER_TOKEN` (default: `demo-worker-token`)
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-백엔드와 함께 실행하면 `/owner/tasks/new`, `/ai/tasks/new`, `/worker/jobs/[taskId]`, `/worker/submissions/[submissionId]`에서
-실제 API 호출이 동작합니다.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
