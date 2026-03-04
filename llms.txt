@@ -1,0 +1,12 @@
+# Human Proxy LLM Index
+
+- Product docs: /docs/index.md
+- API contracts: /docs/03_architecture/api-contracts.md
+- Payment policies: /docs/04_payments/latpeed-integration.md
+- Compliance/KYC baseline: /docs/04_payments/compliance-and-kyc-baseline.md
+- SEO strategy: /docs/08_growth/seo-strategy-kr.md
+- LEO strategy: /docs/08_growth/leo-strategy-llm.md
+- Agent quickstart: /docs/09_agent-enablement/integration-quickstart.md
+- Skills pack: /docs/09_agent-enablement/skills-pack-for-ai-owner.md
+- Site context brief: /docs/09_agent-enablement/agent-site-context-brief.md
+- System prompt template: /docs/09_agent-enablement/agent-system-prompt-template.md

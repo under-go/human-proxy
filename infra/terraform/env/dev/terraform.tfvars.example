@@ -1,0 +1,3 @@
+project     = "human-proxy"
+environment = "dev"
+region      = "ap-northeast-2"

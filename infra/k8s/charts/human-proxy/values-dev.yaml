@@ -1,0 +1,13 @@
+web:
+  image:
+    tag: latest
+  replicaCount: 1
+  hpa:
+    enabled: false
+
+api:
+  image:
+    tag: latest
+  replicaCount: 1
+  hpa:
+    enabled: false

@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: human-proxy-dev
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/CaChiJ/human-proxy.git
+    targetRevision: main
+    path: infra/k8s/charts/human-proxy
+    helm:
+      valueFiles:
+        - values-dev.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: human-proxy-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

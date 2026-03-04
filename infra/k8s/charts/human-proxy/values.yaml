@@ -1,0 +1,42 @@
+global:
+  imagePullSecrets: []
+
+web:
+  image:
+    repository: ghcr.io/cachij/human-proxy-web
+    tag: latest
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    targetCpuUtilizationPercentage: 70
+  pdb:
+    minAvailable: 1
+
+api:
+  image:
+    repository: ghcr.io/cachij/human-proxy-api
+    tag: latest
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 8
+    targetCpuUtilizationPercentage: 70
+  pdb:
+    minAvailable: 1

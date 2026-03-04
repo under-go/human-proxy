@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: human-proxy-web
+spec:
+  selector:
+    app: human-proxy-web
+  ports:
+    - port: 80
+      targetPort: 3000

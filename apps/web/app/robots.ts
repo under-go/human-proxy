@@ -1,0 +1,16 @@
+import type { MetadataRoute } from 'next';
+import { siteMetadata } from '@/lib/seo';
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      {
+        userAgent: '*',
+        allow: ['/'],
+        disallow: ['/workspace', '/owner', '/worker', '/ai', '/login', '/signup']
+      }
+    ],
+    sitemap: `${siteMetadata.siteUrl}/sitemap.xml`,
+    host: siteMetadata.siteUrl
+  };
+}

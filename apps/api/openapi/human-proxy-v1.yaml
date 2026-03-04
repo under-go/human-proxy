@@ -1,0 +1,314 @@
+openapi: 3.0.3
+info:
+  title: Human Proxy API
+  version: 1.0.0
+  description: KR v1 API contract for AI adopter and worker flows.
+servers:
+  - url: https://api.human-proxy.example.com
+paths:
+  /v1/agent/tasks:
+    post:
+      summary: Create task request
+      security:
+        - AgentApiKey: []
+          AgentTimestamp: []
+          AgentNonce: []
+          AgentSignature: []
+          IdempotencyKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreateRequest'
+      responses:
+        '200':
+          description: Created
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/agent/tasks/{taskId}:
+    get:
+      summary: Get task
+      security:
+        - AgentApiKey: []
+          AgentTimestamp: []
+          AgentNonce: []
+          AgentSignature: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task summary
+        '404':
+          description: Task not found
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/agent/tasks/{taskId}/review:
+    post:
+      summary: Review task
+      security:
+        - AgentApiKey: []
+          AgentTimestamp: []
+          AgentNonce: []
+          AgentSignature: []
+          IdempotencyKey: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewDecision'
+      responses:
+        '200':
+          description: Review accepted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/agent/webhooks/subscriptions:
+    post:
+      summary: Subscribe webhooks
+      security:
+        - AgentApiKey: []
+          AgentTimestamp: []
+          AgentNonce: []
+          AgentSignature: []
+          IdempotencyKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+      responses:
+        '200':
+          description: Subscription created
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/jobs/open:
+    get:
+      summary: List open jobs
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Job list
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/jobs/{taskId}/accept:
+    post:
+      summary: Accept job
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Accepted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/jobs/{taskId}/submissions:
+    post:
+      summary: Submit result
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionPayload'
+      responses:
+        '200':
+          description: Submission received
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/jobs/{taskId}/withdraw:
+    post:
+      summary: Withdraw accepted job
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Withdrawn
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/payments/latpeed/webhook:
+    post:
+      summary: Receive Latpeed webhook
+      security:
+        - LatpeedSignature: []
+          LatpeedTimestamp: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId:
+                  type: string
+      responses:
+        '200':
+          description: Accepted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/wallet/ledger:
+    get:
+      summary: Get wallet ledger entries
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Ledger entries
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/settlements:
+    get:
+      summary: Get settlement list
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Settlements
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/disputes:
+    post:
+      summary: Create dispute
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisputeCreateRequest'
+      responses:
+        '200':
+          description: Dispute opened
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    AgentApiKey:
+      type: apiKey
+      in: header
+      name: X-HP-API-KEY
+    AgentTimestamp:
+      type: apiKey
+      in: header
+      name: X-HP-TIMESTAMP
+    AgentNonce:
+      type: apiKey
+      in: header
+      name: X-HP-NONCE
+    AgentSignature:
+      type: apiKey
+      in: header
+      name: X-HP-SIGNATURE
+    IdempotencyKey:
+      type: apiKey
+      in: header
+      name: Idempotency-Key
+    LatpeedSignature:
+      type: apiKey
+      in: header
+      name: X-LATPEED-SIGNATURE
+    LatpeedTimestamp:
+      type: apiKey
+      in: header
+      name: X-LATPEED-TIMESTAMP
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication headers
+  schemas:
+    TaskCreateRequest:
+      type: object
+      required: [spec, reward]
+      properties:
+        spec:
+          type: object
+          required: [prompt, expectedOutput, category, deadlineAt]
+          properties:
+            prompt:
+              type: string
+            expectedOutput:
+              type: string
+            category:
+              type: string
+            deadlineAt:
+              type: string
+              format: date-time
+        reward:
+          type: object
+          required: [amountKrw, feeKrw]
+          properties:
+            amountKrw:
+              type: integer
+              format: int64
+            feeKrw:
+              type: integer
+              format: int64
+    ReviewDecision:
+      type: object
+      required: [decision]
+      properties:
+        decision:
+          type: string
+          enum: [APPROVED, REVISION_REQUESTED, REJECTED]
+        reasonCode:
+          type: string
+        comment:
+          type: string
+    SubmissionPayload:
+      type: object
+      required: [text]
+      properties:
+        text:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+    DisputeCreateRequest:
+      type: object
+      required: [taskId, reason]
+      properties:
+        taskId:
+          type: string
+        reason:
+          type: string
+        detail:
+          type: string
